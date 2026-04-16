@@ -202,7 +202,6 @@
             </div>
             <hr class="bg-secondary">
             <div class="text-center">
-                <p>&copy; 2026 Sehatin. Semua Hak Dilindungi. Kesehatan adalah investasi terbaik.</p>
                 <p>&copy; Copyright Viktorikus Nokia Laksamana Febrianto - 152023131.</p>
             </div>
         </div>
