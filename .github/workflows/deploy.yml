@@ -39,25 +39,15 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # Pull latest image
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
+            cd ~/sehatin
+            # Login ke Docker Hub
+            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
             
-            # Stop & remove old container
-            docker stop sehatin-app || true
-            docker rm sehatin-app || true
+            # Tarik image terbaru yang baru di-build
+            sudo docker-compose pull
             
-            # Run container dengan env variables
-            docker run -d \
-              --name sehatin-app \
-              -p 80:9000 \
-              -e DB_HOST=${{ secrets.DB_HOST }} \
-              -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
-              -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-              -e DB_DATABASE=${{ secrets.DB_DATABASE }} \
-              -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
-              -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-              -e AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }} \
-              -e AWS_BUCKET=${{ secrets.AWS_BUCKET }} \
-              -e APP_KEY=${{ secrets.APP_KEY }} \
-              -e APP_ENV=production \
-              ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}:latest
+            # Restart container dengan image baru
+            sudo docker-compose up -d --remove-orphans
+            
+            # Opsional: Jalankan migrasi otomatis setiap kali deploy
+            sudo docker exec sehatin-app php artisan migrate --force
