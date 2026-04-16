@@ -1,0 +1,14 @@
+.env.example
+.git
+.gitignore
+.github
+.editorconfig
+.DS_Store
+node_modules
+storage/logs
+storage/framework/cache
+bootstrap/cache
+vendor
+.vscode
+.idea
+*.log
