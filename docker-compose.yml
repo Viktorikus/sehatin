@@ -1,0 +1,30 @@
+﻿version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: viktorikus/sehatin-app:latest
+    container_name: sehatin-app
+    restart: unless-stopped
+    env_file: .env
+    networks:
+      - sehatin-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: sehatin-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - app
+    networks:
+      - sehatin-network
+
+networks:
+  sehatin-network:
+    driver: bridge
