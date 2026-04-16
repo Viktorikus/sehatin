@@ -51,3 +51,5 @@ jobs:
             
             # Opsional: Jalankan migrasi otomatis setiap kali deploy
             sudo docker exec sehatin-app php artisan migrate --force
+
+            # PLSS BISA
